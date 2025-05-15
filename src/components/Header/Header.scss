@@ -1,0 +1,112 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #2c3e50;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    
+    a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      
+      &:hover {
+        color: #3498db;
+      }
+    }
+  }
+
+  &__nav {
+    ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      
+      li {
+        margin-left: 1.5rem;
+        position: relative;
+        
+        &.active {
+          a {
+            color: #3498db;
+            
+            &::after {
+              width: 100%;
+            }
+          }
+        }
+        
+        a {
+          color: white;
+          text-decoration: none;
+          font-weight: 500;
+          padding: 0.5rem 0;
+          position: relative;
+          transition: color 0.3s ease;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #3498db;
+            transition: width 0.3s ease;
+          }
+          
+          &:hover {
+            color: #3498db;
+            
+            &::after {
+              width: 100%;
+            }
+          }
+          
+          &.logout-btn {
+            color: #e74c3c;
+            
+            &::after {
+              background-color: #e74c3c;
+            }
+            
+            &:hover {
+              color: #c0392b;
+              
+              &::after {
+                background-color: #c0392b;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 1rem;
+    
+    &__logo {
+      margin-bottom: 1rem;
+    }
+    
+    &__nav ul {
+      flex-wrap: wrap;
+      justify-content: center;
+      
+      li {
+        margin: 0 0.75rem;
+      }
+    }
+  }
+}

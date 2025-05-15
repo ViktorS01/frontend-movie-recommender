@@ -5,7 +5,7 @@ export interface Movie {
   imageUrl: string;
   genres: string[];
   releaseYear: number;
-  rating?: number; // User's rating, optional
+  rating?: number;
 }
 
 export interface User {
@@ -20,7 +20,11 @@ export interface UserRatedMovie {
   rating: number;
 }
 
-export interface AuthCredentials {
+export interface AuthCredentialsRequest {
   username: string;
   password: string;
+}
+
+export interface AuthCredentialsResponse {
+  access_token: string;
 }

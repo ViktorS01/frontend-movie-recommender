@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { authService } from '../../api';
-import { AuthCredentials } from '../../types';
+import { AuthCredentialsRequest } from '../../types';
 import './Auth.scss';
 
 const Auth: React.FC = () => {
@@ -13,24 +13,18 @@ const Auth: React.FC = () => {
   const { 
     register, 
     handleSubmit, 
-    formState: { errors } 
-  } = useForm<AuthCredentials>();
+    formState: { errors },
+  } = useForm<AuthCredentialsRequest>();
 
-  const onSubmit = async (data: AuthCredentials) => {
+  const onSubmit = async (data: AuthCredentialsRequest) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // In a production environment, we would use authService.login
-      // For development/demo, we use the mock implementation
-      const user = await authService.mockLogin(data.username, data.password);
+      const { access_token } = await authService.login(data);
 
-      if (user) {
-        // Store token in localStorage (in a real app, this would come from the API)
-        localStorage.setItem('token', 'demo-token');
-
-        // In a real app, you would store the user in context or state management
-        // For now, we'll just navigate to the recommended page
+      if (access_token) {
+        localStorage.setItem('token', access_token);
         navigate('/recommended');
       } else {
         setError('Invalid username or password');
@@ -91,8 +85,8 @@ const Auth: React.FC = () => {
 
           <div className="auth-info">
             <p>Demo credentials:</p>
-            <p>Username: user1</p>
-            <p>Password: password</p>
+            <p>Username: a@test.com</p>
+            <p>Password: root</p>
           </div>
         </div>
       </div>

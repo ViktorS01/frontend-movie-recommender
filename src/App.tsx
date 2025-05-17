@@ -13,9 +13,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/login" element={
-            <PageGuard>
               <Auth />
-            </PageGuard>
           } />
           <Route path="/recommended" element={
             <PageGuard>

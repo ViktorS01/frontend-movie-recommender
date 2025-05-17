@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { movieService } from '../../api';
+import { useState, useEffect, FC } from 'react';
+import { movieService, ratingService } from '../../api';
 import { Movie } from '../../types';
 import Header from '../../components/Header/Header';
 import MovieCard from '../../components/MovieCard/MovieCard';
@@ -8,50 +8,47 @@ import './AllMovies.scss';
 
 const ITEMS_PER_PAGE = 6;
 
-const AllMovies: React.FC = () => {
+const AllMovies: FC = () => {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Fetch all movies from the API
-    const fetchMovies = async () => {
-      setIsLoading(true);
-      try {
-        // In a production environment, we would use movieService.getAllMovies
-        // For development/demo, we use the mock implementation
-        const allMoviesData = await movieService.mockGetAllMovies();
-        setAllMovies(allMoviesData);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchMovies = async (needLoader = true) => {
+    needLoader && setIsLoading(true);
+    try {
+      const allMoviesData = await movieService.getAllMovies();
+      setAllMovies(allMoviesData);
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchMovies();
   }, []);
 
   const handleRateMovie = async (movieId: number, rating: number) => {
     try {
-      // In a production environment, we would use movieService.rateMovie
-      // For development/demo, we use the mock implementation
-      const updatedMovie = await movieService.mockRateMovie(movieId, rating);
-
-      // Update the local state to reflect the rating
-      setAllMovies(prevMovies => 
-        prevMovies.map(movie => 
-          movie.id === movieId ? { ...movie, rating: updatedMovie.rating } : movie
-        )
-      );
+      await ratingService.rateMovie(movieId, rating);
+      await fetchMovies(false);
     } catch (error) {
       console.error('Error rating movie:', error);
     }
   };
 
+  const handleDeleteRateMovie = async (movieId: number) => {
+    try {
+      await ratingService.deleteRating(movieId);
+      await fetchMovies(false);
+    } catch (error) {
+      console.error('Error delete rating movie:', error);
+    }
+  }
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to top when changing page
     window.scrollTo(0, 0);
   };
 
@@ -89,6 +86,7 @@ const AllMovies: React.FC = () => {
                       key={movie.id} 
                       movie={movie} 
                       onRate={handleRateMovie}
+                      onDelete={handleDeleteRateMovie}
                     />
                   ))}
                 </div>

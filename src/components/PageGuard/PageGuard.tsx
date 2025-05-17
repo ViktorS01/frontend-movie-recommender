@@ -41,10 +41,6 @@ const PageGuard: React.FC<PageGuardProps> = ({ children }) => {
 
   };
 
-  if (isAuthenticated && location.pathname === '/login') {
-    return <Navigate to="/" state={{ from: location }} replace />;
-  }
-
   if (isAuthenticated === null) {
     return (
       <div className="page-guard-loading">

@@ -2,8 +2,8 @@ import api from '../apiConfig';
 import { Movie } from '../../types';
 
 export const movieService = {
-  getAllMovies: (): Promise<Movie[]> => {
-    return api.get<Movie[]>('/movies');
+  getAllMovies: (search?: string): Promise<Movie[]> => {
+    return api.get<Movie[]>('/movies', {params: {search}});
   },
 
   getRecommendedMovies: (): Promise<Movie[]> => {
